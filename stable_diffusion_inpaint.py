@@ -50,6 +50,10 @@ def replace_img_with_sd(
     print("Original img and maks img before")
     print(img)
     print(mask)
+
+    print("Post Padding img and maks img")
+    print(img_padded)
+    print(255 - mask_padded)
     
     print("Before calling pipe:")
     print("img_padded type:", type(img_padded))
@@ -58,6 +62,10 @@ def replace_img_with_sd(
     # Convert numpy arrays to PIL images
     img_padded_pil = Image.fromarray(img_padded)
     mask_padded_pil = Image.fromarray(255 - mask_padded)
+
+    print("Post PIL img conversion for img and maks img")
+    print(img_padded_pil)
+    print(mask_padded_pil)
 
     print("After converting to PIL images:")
     print("img_padded_pil type:", type(img_padded_pil))
