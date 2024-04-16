@@ -10,7 +10,7 @@ from diffusers import ControlNetModel, StableDiffusionInpaintPipeline, StableDif
 from utils.mask_processing import crop_for_filling_pre, crop_for_filling_post
 from utils.crop_for_replacing import recover_size, resize_and_pad
 from utils import load_img_to_array, save_array_to_img
-
+import cv2
 
 def fill_img_with_sd(
         img: np.ndarray,
@@ -44,19 +44,18 @@ def replace_img_with_sd(
         torch_dtype=torch.float32
     )
     pipe = StableDiffusionControlNetInpaintPipeline.from_pretrained(
-        "runwayml/stable-diffusion-v1-5",
+        "stabilityai/stable-diffusion-2-inpainting",
         controlnet=controlnet,
         torch_dtype=torch.float32,
     ).to(device)
     img_padded, mask_padded, padding_factors = resize_and_pad(img, mask)
+    canny_image = cv2.Canny(Image.fromarray(img_padded), 100, 200)
+
     img_padded = pipe(
         prompt=text_prompt,
-        image=torch.from_numpy(
-            Image.fromarray(img_padded)
-        ),
-        mask_image=torch.from_numpy(
-            Image.fromarray(255 - mask_padded)
-        ),
+        image=Image.fromarray(img_padded),
+        mask_image=Image.fromarray(255 - mask_padded),
+        control_image=canny_image, 
         num_inference_steps=step,
     ).images[0]
     height, width, _ = img.shape
