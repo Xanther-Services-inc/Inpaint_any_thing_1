@@ -6,7 +6,7 @@ import torch
 import numpy as np
 import PIL.Image as Image
 from pathlib import Path
-from diffusers import ControlNetModel, StableDiffusionControlNetInpaintPipeline
+from diffusers import ControlNetModel, StableDiffusionInpaintPipeline, StableDiffusionControlNetInpaintPipeline
 from utils.mask_processing import crop_for_filling_pre, crop_for_filling_post
 from utils.crop_for_replacing import recover_size, resize_and_pad
 from utils import load_img_to_array, save_array_to_img
@@ -40,9 +40,9 @@ def replace_img_with_sd(
         device="cuda"
 ):
     controlnet = ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-canny", torch_dtype=torch.float32)
-    pipe = StableDiffusionControlNetInpaintPipeline.from_pretrained(
+    pipe = StableDiffusionInpaintPipeline.from_pretrained(
         "stabilityai/stable-diffusion-2-inpainting",
-        controlnet=controlnet,
+        #controlnet=controlnet,
         torch_dtype=torch.float32,
     ).to(device)
 
