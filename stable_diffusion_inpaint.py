@@ -39,7 +39,10 @@ def replace_img_with_sd(
         step: int = 50,
         device="cuda"
 ):
-    controlnet = ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-canny", torch_dtype=torch.float32)
+    controlnet = ControlNetModel.from_pretrained(
+        "lllyasviel/sd-controlnet-canny", 
+        torch_dtype=torch.float32
+    )
     pipe = StableDiffusionControlNetInpaintPipeline.from_pretrained(
         "stabilityai/stable-diffusion-2-inpainting",
         controlnet=controlnet,
@@ -48,8 +51,12 @@ def replace_img_with_sd(
     img_padded, mask_padded, padding_factors = resize_and_pad(img, mask)
     img_padded = pipe(
         prompt=text_prompt,
-        image=Image.fromarray(img_padded),
-        mask_image=Image.fromarray(255 - mask_padded),
+        image=torch.from_numpy(
+            Image.fromarray(img_padded)
+        ),
+        mask_image=torch.from_numpy(
+            Image.fromarray(255 - mask_padded)
+        ),
         num_inference_steps=step,
     ).images[0]
     height, width, _ = img.shape

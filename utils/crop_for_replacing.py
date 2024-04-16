@@ -21,11 +21,6 @@ def resize_and_pad(image: np.ndarray, mask: np.ndarray, target_size: int = 512) 
     new_height = int(height * scale)
     new_width = int(width * scale)
     image_resized = cv2.resize(image, (new_width, new_height), interpolation=cv2.INTER_LINEAR)
-    print('Image resized')
-    print(image_resized)
-    mask_resized = cv2.resize(mask, (new_width, new_height), interpolation=cv2.INTER_LINEAR)
-    print('Mask resized')
-    print(mask_resized)
     pad_height = target_size - new_height
     pad_width = target_size - new_width
     top_pad = pad_height // 2
@@ -34,10 +29,6 @@ def resize_and_pad(image: np.ndarray, mask: np.ndarray, target_size: int = 512) 
     right_pad = pad_width - left_pad
     image_padded = np.pad(image_resized, ((top_pad, bottom_pad), (left_pad, right_pad), (0, 0)), mode='constant')
     mask_padded = np.pad(mask_resized, ((top_pad, bottom_pad), (left_pad, right_pad)), mode='constant')
-    print('Image padded')
-    print(image_padded)
-    print('Mask padded')
-    print(mask_padded)
     return image_padded, mask_padded, (top_pad, bottom_pad, left_pad, right_pad)
 
 def recover_size(image_padded: np.ndarray, mask_padded: np.ndarray, orig_size: Tuple[int, int], 
