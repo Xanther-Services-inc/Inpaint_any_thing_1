@@ -6,7 +6,7 @@ import torch
 import numpy as np
 import PIL.Image as Image
 from pathlib import Path
-from diffusers import ControlNetModel, StableDiffusionInpaintPipeline, StableDiffusionControlNetInpaintPipeline
+from diffusers import StableDiffusionInpaintPipeline
 from utils.mask_processing import crop_for_filling_pre, crop_for_filling_post
 from utils.crop_for_replacing import recover_size, resize_and_pad
 from utils import load_img_to_array, save_array_to_img
@@ -39,38 +39,11 @@ def replace_img_with_sd(
         step: int = 50,
         device="cuda"
 ):
-    controlnet = ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-canny", torch_dtype=torch.float32)
     pipe = StableDiffusionInpaintPipeline.from_pretrained(
         "stabilityai/stable-diffusion-2-inpainting",
-        #controlnet=controlnet,
         torch_dtype=torch.float32,
     ).to(device)
-
     img_padded, mask_padded, padding_factors = resize_and_pad(img, mask)
-    print("Original img and maks img before")
-    print(img)
-    print(mask)
-
-    print("Post Padding img and maks img")
-    print(img_padded)
-    print(255 - mask_padded)
-    
-    print("Before calling pipe:")
-    print("img_padded type:", type(img_padded))
-    print("mask_padded type:", type(mask_padded))
-
-    # Convert numpy arrays to PIL images
-    img_padded_pil = Image.fromarray(img_padded)
-    mask_padded_pil = Image.fromarray(255 - mask_padded)
-
-    print("Post PIL img conversion for img and maks img")
-    print(img_padded_pil)
-    print(mask_padded_pil)
-
-    print("After converting to PIL images:")
-    print("img_padded_pil type:", type(img_padded_pil))
-    print("mask_padded_pil type:", type(mask_padded_pil))
-
     img_padded = pipe(
         prompt=text_prompt,
         image=Image.fromarray(img_padded),
