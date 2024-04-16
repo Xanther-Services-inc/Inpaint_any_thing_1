@@ -52,10 +52,10 @@ def replace_img_with_sd(
     img_padded = pipe(
         prompt=text_prompt,
         image=torch.from_numpy(
-            Image.fromarray(img_padded)
+            img_padded
         ),
         mask_image=torch.from_numpy(
-            Image.fromarray(255 - mask_padded)
+            255 - mask_padded
         ),
         num_inference_steps=step,
     ).images[0]
