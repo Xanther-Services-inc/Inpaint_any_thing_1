@@ -45,6 +45,19 @@ def replace_img_with_sd(
         controlnet=controlnet,
         torch_dtype=torch.float32,
     ).to(device)
+
+    print("Before calling pipe:")
+    print("img_padded type:", type(img_padded))
+    print("mask_padded type:", type(mask_padded))
+
+    # Convert numpy arrays to PIL images
+    img_padded_pil = Image.fromarray(img_padded)
+    mask_padded_pil = Image.fromarray(255 - mask_padded)
+
+    print("After converting to PIL images:")
+    print("img_padded_pil type:", type(img_padded_pil))
+    print("mask_padded_pil type:", type(mask_padded_pil))
+
     img_padded, mask_padded, padding_factors = resize_and_pad(img, mask)
     img_padded = pipe(
         prompt=text_prompt,
