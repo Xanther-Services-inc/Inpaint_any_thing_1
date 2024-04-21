@@ -45,11 +45,14 @@ def replace_img_with_sd(
         controlnet=controlnet,
         torch_dtype=torch.float32,
     ).to(device)
-    img_padded, mask_padded, padding_factors = resize_and_pad(img, mask)
+     img_padded, mask_padded, padding_factors = resize_and_pad(img, mask)
+    canny_image = cv2.Canny(img_padded, 100, 200)
+
     img_padded = pipe(
         prompt=text_prompt,
         image=Image.fromarray(img_padded),
         mask_image=Image.fromarray(255 - mask_padded),
+        control_image=Image.fromarray(canny_image), 
         num_inference_steps=step,
     ).images[0]
     height, width, _ = img.shape
