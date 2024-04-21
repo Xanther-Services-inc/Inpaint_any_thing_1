@@ -40,7 +40,7 @@ def replace_img_with_sd(
         device="cuda"
 ):
     controlnet = ControlNetModel.from_pretrained(
-        "thibaud/controlnet-sd21-canny-diffusers", 
+        "lllyasviel/sd-controlnet-canny", 
         torch_dtype=torch.float32
     )
     pipe = StableDiffusionControlNetInpaintPipeline.from_pretrained(
