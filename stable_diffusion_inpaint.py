@@ -6,11 +6,11 @@ import torch
 import numpy as np
 import PIL.Image as Image
 from pathlib import Path
-from diffusers import ControlNetModel, StableDiffusionInpaintPipeline, StableDiffusionControlNetInpaintPipeline
+from diffusers import ControlNetModel, StableDiffusionControlNetInpaintPipeline
 from utils.mask_processing import crop_for_filling_pre, crop_for_filling_post
 from utils.crop_for_replacing import recover_size, resize_and_pad
 from utils import load_img_to_array, save_array_to_img
-import cv2
+
 
 def fill_img_with_sd(
         img: np.ndarray,
@@ -39,23 +39,17 @@ def replace_img_with_sd(
         step: int = 50,
         device="cuda"
 ):
-    controlnet = ControlNetModel.from_pretrained(
-        "lllyasviel/sd-controlnet-canny", 
-        torch_dtype=torch.float32
-    )
+    controlnet = ControlNetModel.from_pretrained("thibaud/controlnet-sd21-canny-diffusers", torch_dtype=torch.float32)
     pipe = StableDiffusionControlNetInpaintPipeline.from_pretrained(
-        "runwayml/stable-diffusion-inpainting",
+        "stabilityai/stable-diffusion-2-inpainting",
         controlnet=controlnet,
         torch_dtype=torch.float32,
     ).to(device)
     img_padded, mask_padded, padding_factors = resize_and_pad(img, mask)
-    canny_image = cv2.Canny(img_padded, 100, 200)
-
     img_padded = pipe(
         prompt=text_prompt,
         image=Image.fromarray(img_padded),
         mask_image=Image.fromarray(255 - mask_padded),
-        control_image=Image.fromarray(canny_image), 
         num_inference_steps=step,
     ).images[0]
     height, width, _ = img.shape
