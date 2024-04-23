@@ -55,7 +55,7 @@ def setup_args(parser):
         help = "control_guidance_start",
     )
     parser.add_argument(
-        "--control_guidance_end",type = float ,requierd =True,
+        "--control_guidance_end",type = float ,required =True,
         help = "control_guidance_end",
     )
     parser.add_argument(
