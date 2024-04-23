@@ -37,7 +37,12 @@ def replace_img_with_sd(
         img: np.ndarray,
         mask: np.ndarray,
         text_prompt: str,
-        step: int = 50,
+        negative_prompt:str,
+        num_inference_steps:int,
+        guidance_scale:float,
+        controlnet_conditioning_scale:float,
+        control_guidance_start:float,
+        control_guidance_end:float,
         device="cuda"
 ):
     controlnet = ControlNetModel.from_pretrained("thibaud/controlnet-sd21-canny-diffusers", torch_dtype=torch.float32)
@@ -54,7 +59,13 @@ def replace_img_with_sd(
         image=Image.fromarray(img_padded),
         mask_image=Image.fromarray(255 - mask_padded),
         control_image=Image.fromarray(canny_image), 
-        num_inference_steps=step,
+        num_inference_steps=num_inference_steps,
+        guidance_scale=guidance_scale,
+        negative_prompt=negative_prompt,
+        controlnet_conditioning_scale = controlnet_conditioning_scale,
+        control_guidance_start = control_guidance_start,
+        control_guidance_end = control_guidance_end,
+
     ).images[0]
     height, width, _ = img.shape
     img_resized, mask_resized = recover_size(

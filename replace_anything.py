@@ -35,6 +35,30 @@ def setup_args(parser):
         help="Text prompt",
     )
     parser.add_argument(
+        "--negative_prompt",type=str,required = True,
+        help = "Negative prompt",
+    )
+    parser.add_arguemnt(
+        "--num_inference_steps",type = int,required = True ,
+        help = "Enter num_inference_steps",
+    )
+    parser.add_argumnet(
+        "--guidance_scale",type= float , required = True ,
+        help = "guidance_scale in float",
+    )
+    parser.add_argument(
+        "--controlnet_conditioning_scale" , type = float , required = True ,
+        help = "controlnet_conditioning_scale",
+    )
+    parser.add_argument(
+        "--control_guidance_start",type = float ,required = True ,
+        help = "control_guidance_start",
+    )
+    parser.add_argument(
+        "--control_guidance_end",type = float ,requierd =True,
+        help = "control_guidance_end",
+    )
+    parser.add_argument(
         "--dilate_kernel_size", type=int, default=None,
         help="Dilate kernel size. Default: None",
     )
@@ -42,6 +66,7 @@ def setup_args(parser):
         "--output_dir", type=str, required=True,
         help="Output path to the directory with results.",
     )
+  
     parser.add_argument(
         "--sam_model_type", type=str,
         default="vit_h", choices=['vit_h', 'vit_l', 'vit_b', 'vit_t'],
@@ -70,6 +95,12 @@ if __name__ == "__main__":
         --point_coords 750 500 \
         --point_labels 1 \
         --text_prompt "sit on the swing" \
+        --negative_prompt ""\
+        --num_inference_steps 50 \
+        --guidance_scale 7.5 \
+        --controlnet_conditioning_scale 0.5 \
+        --control_guidance_start 0.0 \
+        --control_guidance_end 1.0 \
         --output_dir ./results \
         --sam_model_type "vit_h" \
         --sam_ckpt ./pretrained_models/sam_vit_h_4b8939.pth
@@ -132,5 +163,5 @@ if __name__ == "__main__":
         mask_p = out_dir / f"mask_{idx}.png"
         img_replaced_p = out_dir / f"replaced_with_{Path(mask_p).name}"
         img_replaced = replace_img_with_sd(
-            img, mask, args.text_prompt, device=device)
+            img, mask, args.text_prompt, args.negative_prompt,args.num_inference_steps,args.guidance_scale,args.controlnet_conditioning_scale ,args.control_guidance_start,args.control_guidance_end, device=device)
         save_array_to_img(img_replaced, img_replaced_p)
