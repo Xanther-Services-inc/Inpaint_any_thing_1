@@ -38,11 +38,11 @@ def setup_args(parser):
         "--negative_prompt",type=str,required = True,
         help = "Negative prompt",
     )
-    parser.add_arguemnt(
+    parser.add_argument(
         "--num_inference_steps",type = int,required = True ,
         help = "Enter num_inference_steps",
     )
-    parser.add_argumnet(
+    parser.add_argument(
         "--guidance_scale",type= float , required = True ,
         help = "guidance_scale in float",
     )
