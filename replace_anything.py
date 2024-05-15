@@ -42,7 +42,7 @@ def setup_args(parser):
         "--num_inference_steps",type = int,required = True ,
         help = "Enter num_inference_steps",
     )
-    parser.add_argumet(
+    parser.add_argument(
         "--d_strength",type= float , required = True ,
         help = "d_strength in float",
     )
