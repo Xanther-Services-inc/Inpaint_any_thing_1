@@ -42,6 +42,10 @@ def setup_args(parser):
         "--num_inference_steps",type = int,required = True ,
         help = "Enter num_inference_steps",
     )
+    parser.add_argumet(
+        "--d_strength",type= float , required = True ,
+        help = "d_strength in float",
+    )
     parser.add_argument(
         "--guidance_scale",type= float , required = True ,
         help = "guidance_scale in float",
@@ -97,6 +101,7 @@ if __name__ == "__main__":
         --text_prompt "sit on the swing" \
         --negative_prompt ""\
         --num_inference_steps 50 \
+        --d_strength 0.9
         --guidance_scale 7.5 \
         --controlnet_conditioning_scale 0.5 \
         --control_guidance_start 0.0 \
