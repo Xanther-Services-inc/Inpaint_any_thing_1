@@ -48,7 +48,7 @@ def replace_img_with_sd(
 ):
     controlnet = ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-canny", torch_dtype=torch.float32)
     pipe = StableDiffusionControlNetInpaintPipeline.from_pretrained(
-        "stablediffusionapi/realism-engine-sdxl-v30",
+        "SG161222/Realistic_Vision_V6.0_B1_noVAE",
         controlnet=controlnet,
         torch_dtype=torch.float32,
     ).to(device)
