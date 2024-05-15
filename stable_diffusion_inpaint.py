@@ -49,7 +49,7 @@ def replace_img_with_sd(
     pipe = StableDiffusionControlNetInpaintPipeline.from_pretrained(
         "SG161222/Realistic_Vision_V6.0_B1_noVAE",
         controlnet=controlnet,
-        torch_dtype=torch.float16,,
+        torch_dtype=torch.float16,
     ).to(device)
     img_padded, mask_padded, padding_factors = resize_and_pad(img, mask)
     canny_image = cv2.Canny(img_padded, 100, 200)
