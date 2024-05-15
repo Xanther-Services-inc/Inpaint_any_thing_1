@@ -168,5 +168,5 @@ if __name__ == "__main__":
         mask_p = out_dir / f"mask_{idx}.png"
         img_replaced_p = out_dir / f"replaced_with_{Path(mask_p).name}"
         img_replaced = replace_img_with_sd(
-            img, mask, args.text_prompt, args.negative_prompt,args.num_inference_steps,args.guidance_scale,args.controlnet_conditioning_scale ,args.control_guidance_start,args.control_guidance_end, device=device)
+            img, mask, args.text_prompt, args.negative_prompt,args.num_inference_steps,args.d_strength,args.guidance_scale,args.controlnet_conditioning_scale ,args.control_guidance_start,args.control_guidance_end, device=device)
         save_array_to_img(img_replaced, img_replaced_p)
